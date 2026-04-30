@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · Comandero</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1020;
+    --bg-soft: #131b31;
+    --surface: rgba(14, 20, 38, 0.9);
+    --surface-strong: rgba(19, 27, 49, 0.98);
+    --surface2: #1a2340;
+    --surface3: #222d52;
+    --border: rgba(182, 196, 255, 0.12);
+    --border-strong: rgba(182, 196, 255, 0.2);
+    --accent: #d8ff61;
+    --accent-dim: rgba(216, 255, 97, 0.14);
+    --accent-strong: #edff9a;
+    --danger: #ff7a7a;
+    --danger-dim: rgba(255, 122, 122, 0.14);
+    --success: #71ffb0;
+    --success-dim: rgba(113, 255, 176, 0.14);
+    --info: #7eb6ff;
+    --text: #f5f7ff;
+    --muted: #97a2c7;
+    --muted-strong: #c4cbdf;
+    --shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at top left, rgba(216, 255, 97, 0.12), transparent 26%),
+      radial-gradient(circle at top right, rgba(126, 182, 255, 0.14), transparent 24%),
+      linear-gradient(180deg, #0a0f1d 0%, #0d1325 38%, #090d18 100%);
+    color: var(--text);
+    font-family: var(--sans);
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.7), transparent 85%);
+  }
+
+  a { color: inherit; }
+
+  /* LOGIN */
+  #login-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .login-shell {
+    width: min(960px, 100%);
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+
+  .login-hero,
+  .login-box {
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(22, 30, 56, 0.95), rgba(11, 16, 30, 0.96));
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px);
+  }
+
+  .login-hero {
+    padding: 2.4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .login-hero::after {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    right: -40px;
+    top: -40px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(216,255,97,0.28), transparent 68%);
+    filter: blur(6px);
+  }
+
+  .login-kicker,
+  .brand-chip,
+  .mini-kicker,
+  .section-eyebrow,
+  .card-kicker,
+  .filtro-label,
+  h3 {
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .login-kicker {
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: .9rem;
+  }
+
+  .login-title {
+    font-size: clamp(2rem, 4vw, 3.6rem);
+    line-height: .96;
+    letter-spacing: -0.05em;
+    max-width: 9ch;
+  }
+
+  .login-title em {
+    color: var(--accent-strong);
+    font-style: normal;
+  }
+
+  .login-copy {
+    margin-top: 1rem;
+    max-width: 40ch;
+    color: var(--muted-strong);
+    line-height: 1.55;
+    font-size: 15px;
+  }
+
+  .login-points {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .9rem;
+    margin-top: 2rem;
+  }
+
+  .login-point {
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 1rem;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .login-point strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: .35rem;
+  }
+
+  .login-point span {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .login-box {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .login-logo {
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 25px;
+    letter-spacing: -0.08em;
+  }
+
+  .login-sub {
+    color: var(--muted);
+    line-height: 1.5;
+    font-size: 14px;
+    margin-bottom: .3rem;
+  }
+
+  .login-box input {
+    width: 100%;
+    background: rgba(7, 10, 20, 0.72);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: var(--mono);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+  }
+
+  .login-box input:focus,
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  input[type="password"]:focus,
+  input[type="date"]:focus,
+  input[type="time"]:focus,
+  select:focus {
+    border-color: rgba(216, 255, 97, 0.6);
+    box-shadow: 0 0 0 4px rgba(216, 255, 97, 0.1);
+  }
+
+  .login-error {
+    display: none;
+    color: var(--danger);
+    font-size: 13px;
+  }
+
+  .btn-accent {
+    width: 100%;
+    border: none;
+    border-radius: 16px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, var(--accent), #f4ffaf);
+    color: #0a0f1d;
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform .18s, box-shadow .18s, opacity .18s;
+    box-shadow: 0 18px 40px rgba(216, 255, 97, 0.18);
+  }
+
+  .btn-accent:hover { transform: translateY(-1px); opacity: .96; }
+
+  /* APP */
+  #app { display: none; }
+
+  .app-shell {
+    width: min(1320px, calc(100% - 32px));
+    margin: 20px auto;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 12px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 14px 18px;
+    background: rgba(10, 15, 29, 0.82);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px);
+    flex-wrap: wrap;
+  }
+
+  .topbar-logo {
+    font-family: var(--mono);
+    color: var(--accent);
+    font-size: 17px;
+    letter-spacing: -0.05em;
+    margin-right: .2rem;
+  }
+
+  .tabbar {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    border: 1px solid transparent;
+    background: rgba(255,255,255,0.03);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: color .18s, border-color .18s, background .18s, transform .18s;
+  }
+
+  .tab-btn:hover {
+    color: var(--text);
+    border-color: var(--border);
+    background: rgba(255,255,255,0.06);
+    transform: translateY(-1px);
+  }
+
+  .tab-btn.active {
+    color: #09101e;
+    background: var(--accent);
+    border-color: rgba(255,255,255,0.18);
+    box-shadow: 0 10px 22px rgba(216, 255, 97, 0.2);
+  }
+
+  .spacer { flex: 1; }
+
+  .topbar-side {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin-left: auto;
+  }
+
+  .brand-chip,
+  .tag-version {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 7px 11px;
+    background: rgba(255,255,255,0.03);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .main {
+    padding: 1.5rem 0 2.5rem;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .section-eyebrow {
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: .55rem;
+  }
+
+  h2 {
+    font-size: clamp(1.9rem, 3vw, 2.7rem);
+    letter-spacing: -0.06em;
+    line-height: .95;
+  }
+
+  .section-copy {
+    color: var(--muted-strong);
+    max-width: 56ch;
+    line-height: 1.55;
+    font-size: 14px;
+  }
+
+  .mini-kicker {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .stack { display: grid; gap: 1rem; }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap: 1rem;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 1.35rem 1.35rem 1.25rem;
+    background: linear-gradient(180deg, rgba(20, 28, 53, 0.92), rgba(11, 16, 31, 0.94));
+    box-shadow: var(--shadow);
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent 34%);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-kicker,
+  h3 {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-top: .2rem;
+  }
+
+  .card-desc {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: .45rem;
+  }
+
+  .card-badge {
+    flex-shrink: 0;
+    padding: 8px 11px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .card-body { position: relative; z-index: 1; }
+
+  .row-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .row-item:last-child { border-bottom: none; }
+  .row-label { flex: 1; font-size: 14px; }
+  .row-sub {
+    color: var(--muted);
+    font-size: 12px;
+    font-family: var(--mono);
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="password"],
+  input[type="date"],
+  input[type="time"],
+  select {
+    width: 100%;
+    background: rgba(7, 10, 20, 0.62);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: var(--sans);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s, transform .2s;
+  }
+
+  select {
+    appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+      linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+    background-position:
+      calc(100% - 18px) calc(50% - 3px),
+      calc(100% - 12px) calc(50% - 3px);
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+  }
+
+  .btn {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 11px 14px;
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--sans);
+    transition: background .18s, border-color .18s, transform .18s;
+  }
+
+  .btn:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+  }
+
+  .btn-sm {
+    padding: 8px 10px;
+    font-size: 12px;
+    border-radius: 12px;
+  }
+
+  .btn-danger {
+    border-color: rgba(255, 122, 122, 0.18);
+    color: var(--danger);
+    background: var(--danger-dim);
+  }
+
+  .btn-danger:hover { background: rgba(255, 122, 122, 0.2); }
+
+  .btn-success {
+    border-color: rgba(113, 255, 176, 0.22);
+    color: var(--success);
+    background: var(--success-dim);
+  }
+
+  .btn-success:hover { background: rgba(113, 255, 176, 0.22); }
+
+  .btn-accent-inline {
+    color: #0a1020;
+    background: linear-gradient(135deg, var(--accent), #f2ffab);
+    border-color: transparent;
+    font-weight: 700;
+  }
+
+  .btn-accent-inline:hover { background: linear-gradient(135deg, #e5ff7b, #f4ffb6); }
+
+  .form-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .form-row input,
+  .form-row select { flex: 1; min-width: 160px; }
+
+  .add-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .helper-pill,
+  .inline-note {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+    color: var(--muted);
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .field-stack { display: grid; gap: 8px; }
+
+  .field-stack label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .destino-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .dest-btn {
+    padding: 9px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.04);
+    color: var(--muted);
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 12px;
+    transition: transform .18s, background .18s, border-color .18s;
+  }
+
+  .dest-btn:hover { transform: translateY(-1px); }
+  .dest-btn.active-barra  { background: rgba(216,255,97,.14); border-color: rgba(216,255,97,.42); color: var(--accent); }
+  .dest-btn.active-cocina { background: rgba(126,182,255,.15); border-color: rgba(126,182,255,.42); color: var(--info); }
+  .dest-btn.active-ambos  { background: rgba(113,255,176,.14); border-color: rgba(113,255,176,.42); color: var(--success); }
+
+  .badge-dest {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    letter-spacing: .03em;
+    white-space: nowrap;
+  }
+
+  .bd-barra  { background: rgba(216,255,97,.14); color: var(--accent); }
+  .bd-cocina { background: rgba(126,182,255,.14); color: var(--info); }
+  .bd-ambos  { background: rgba(113,255,176,.14); color: var(--success); }
+
+  .categoria-header {
+    padding: 12px 0 8px;
+    margin-top: 10px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid rgba(216,255,97,.16);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 15px 16px;
+    background: rgba(255,255,255,0.03);
+    transition: border-color .18s, background .18s, transform .18s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .8rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted-strong);
+  }
+
+  .nav-link:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.06);
+    border-color: var(--border-strong);
+  }
+
+  .filtros-row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) auto auto;
+    gap: 12px;
+    align-items: end;
+  }
+
+  .filtro-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .filtro-label {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .resumen-ventas {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .stat-box {
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 1.1rem 1.15rem;
+    background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  }
+
+  .stat-box-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    color: var(--accent);
+    letter-spacing: -0.05em;
+  }
+
+  .stat-box-lbl {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: .35rem;
+  }
+
+  .ticket-hist {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  .ticket-hist-hdr {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    background: rgba(255,255,255,0.035);
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  .ticket-hist.open .ticket-hist-hdr { border-bottom-color: var(--border); }
+  .ticket-hist-hdr:hover { background: rgba(255,255,255,0.06); }
+  .ticket-hist-mesa { flex: 1; font-family: var(--mono); font-size: 13px; font-weight: 500; }
+  .ticket-hist-total { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+  .ticket-hist-hora { font-size: 11px; color: var(--muted); }
+  .ticket-hist-body { display: none; padding: 12px 15px; }
+  .ticket-hist.open .ticket-hist-body { display: block; }
+
+  .ticket-hist-linea {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 0;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ticket-hist-linea:last-child { border-bottom: none; }
+  .ventas-empty {
+    padding: 2.4rem 1rem;
+    text-align: center;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 13px;
+    border: 1px dashed var(--border);
+    border-radius: 20px;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .metric-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .metric-mini {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1rem;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .metric-mini strong {
+    display: block;
+    font-family: var(--mono);
+    font-size: 22px;
+    color: var(--accent);
+  }
+
+  .metric-mini span {
+    display: block;
+    margin-top: .35rem;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  code {
+    font-family: var(--mono);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2px 6px;
+  }
+
+  .toast {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 100;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--accent), #f4ffb4);
+    color: #0a0f1d;
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 12px 16px;
+    box-shadow: 0 20px 40px rgba(216,255,97,0.2);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all .24s;
+    pointer-events: none;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 1100px) {
+    .login-shell,
+    .grid-2,
+    .grid-3,
+    .resumen-ventas,
+    .metric-strip { grid-template-columns: 1fr; }
+    .filtros-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 780px) {
+    .app-shell { width: min(100% - 20px, 100%); margin: 10px auto; }
+    .topbar { top: 6px; border-radius: 18px; padding: 12px; }
+    .main { padding-top: 1rem; }
+    .section-head { flex-direction: column; align-items: start; }
+    .topbar-side { width: 100%; margin-left: 0; justify-content: space-between; }
+    .filtros-row,
+    .form-grid { grid-template-columns: 1fr; }
+    .tabbar { width: 100%; }
+    .tab-btn { flex: 1 1 calc(50% - 8px); text-align: center; }
+    .login-shell { grid-template-columns: 1fr; }
+    .login-hero { order: 2; }
+  }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-shell">
+    <section class="login-hero">
+      <div>
+        <div class="login-kicker">Panel de control</div>
+        <h1 class="login-title">Gestiona el local sin perder <em>ritmo</em>.</h1>
+        <p class="login-copy">Mesas, carta, ventas, accesos y configuración del negocio en un solo panel. Todo con la misma lógica de Comandero, pero con una vista más clara para el día a día.</p>
+      </div>
+      <div class="login-points">
+        <div class="login-point">
+          <strong>Servicio</strong>
+          <span>Controla mesas, barra y cocina desde el mismo sitio.</span>
+        </div>
+        <div class="login-point">
+          <strong>Carta</strong>
+          <span>Ajusta productos, categorías y destinos en segundos.</span>
+        </div>
+        <div class="login-point">
+          <strong>Ventas</strong>
+          <span>Consulta tickets, totales y consumos del local.</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="login-box">
+      <div class="login-logo">// admin</div>
+      <p class="login-sub">Accede al panel de administración para configurar el local y revisar el servicio.</p>
+      <input type="password" id="pwd-input" placeholder="Contraseña" />
+      <div class="login-error" id="login-error">Contraseña incorrecta</div>
+      <button class="btn-accent" onclick="checkLogin()">Entrar</button>
+      <span class="inline-note">Este acceso solo cambia la vista del panel. La base y la operativa siguen usando la configuración del proyecto.</span>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="app-shell">
+    <div class="topbar">
+      <div class="topbar-logo">// admin</div>
+      <div class="tabbar">
+        <button class="tab-btn active" onclick="showTab('mesas',this)">Mesas</button>
+        <button class="tab-btn" onclick="showTab('carta',this)">Carta</button>
+        <button class="tab-btn" onclick="showTab('ventas',this)">Ventas</button>
+        <button class="tab-btn" onclick="showTab('local',this)">Local</button>
+        <button class="tab-btn" onclick="showTab('enlaces',this)">Accesos</button>
+      </div>
+      <div class="spacer"></div>
+      <div class="topbar-side">
+        <span class="brand-chip">Comandero Control</span>
+        <span class="tag-version">v1</span>
+      </div>
+    </div>
+
+    <div class="main">
+      <section class="section active" id="sec-mesas">
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow">Operativa</div>
+            <h2>Mesas del local</h2>
+            <p class="section-copy">Mantén ordenada la sala y adapta la lista de mesas a la distribución real del negocio. Renombra, crea y elimina mesas desde aquí.</p>
+          </div>
+          <div class="mini-kicker">Base de servicio</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Inventario de sala</div>
+                <div class="card-title">Lista actual</div>
+                <p class="card-desc">Las mesas aparecen ordenadas y listas para editarse directamente.</p>
+              </div>
+              <span class="card-badge">En vivo</span>
+            </div>
+            <div class="card-body">
+              <div id="mesas-lista"></div>
+            </div>
+          </div>
+
+          <div class="stack">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-kicker">Alta rápida</div>
+                  <div class="card-title">Añadir mesa</div>
+                  <p class="card-desc">Usa nombres claros como números, zonas o referencias del salón.</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="field-stack">
+                  <label for="nueva-mesa">Nombre de la mesa</label>
+                  <input type="text" id="nueva-mesa" placeholder="Ej: 4, Terraza 1, Barra" />
+                </div>
+                <div class="add-row">
+                  <button class="btn btn-success" onclick="addMesa()">+ Añadir mesa</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-kicker">Consejo</div>
+                  <div class="card-title">Nomenclatura útil</div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="metric-strip">
+                  <div class="metric-mini">
+                    <strong>4</strong>
+                    <span>Número simple para interior</span>
+                  </div>
+                  <div class="metric-mini">
+                    <strong>T1</strong>
+                    <span>Formato corto para terraza</span>
+                  </div>
+                  <div class="metric-mini">
+                    <strong>Barra</strong>
+                    <span>Útil para pedidos sin mesa</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-carta">
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow">Oferta</div>
+            <h2>Carta y categorías</h2>
+            <p class="section-copy">Organiza los productos por familias, asigna destinos y mantén la carta clara para que camarero, barra y cocina trabajen sincronizados.</p>
+          </div>
+          <div class="mini-kicker">Edición dinámica</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="stack">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-kicker">Estructura</div>
+                  <div class="card-title">Nueva categoría</div>
+                  <p class="card-desc">Crea bloques de carta antes de cargar productos para mantener orden desde el principio.</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="form-row">
+                  <input type="text" id="cat-nombre" placeholder="Nombre de categoría, por ejemplo Cervezas" />
+                  <button class="btn btn-success" onclick="addCategoria()">+ Categoría</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-kicker">Alta</div>
+                  <div class="card-title">Nuevo artículo</div>
+                  <p class="card-desc">Añade producto, precio, categoría y destino operativo desde un solo bloque.</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="form-row">
+                  <input type="text" id="art-nombre" placeholder="Nombre del artículo" style="flex:2" />
+                  <input type="number" id="art-precio" placeholder="Precio €" step="0.1" min="0" style="max-width:140px" />
+                </div>
+                <div class="form-grid">
+                  <div class="field-stack">
+                    <label for="art-cat">Categoría</label>
+                    <select id="art-cat"><option value="">— Categoría —</option></select>
+                  </div>
+                  <div class="field-stack">
+                    <label>Destino</label>
+                    <div class="destino-btns">
+                      <button class="dest-btn active-barra" id="db-barra" onclick="setDest('barra')">Barra</button>
+                      <button class="dest-btn" id="db-cocina" onclick="setDest('cocina')">Cocina</button>
+                      <button class="dest-btn" id="db-ambos" onclick="setDest('ambos')">Ambos</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="add-row">
+                  <button class="btn btn-success" onclick="addArticulo()">+ Añadir artículo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Carta viva</div>
+                <div class="card-title">Productos cargados</div>
+                <p class="card-desc">Edita artículos, cambia el destino o reordena el contenido sin salir de este panel.</p>
+              </div>
+              <span class="card-badge">Operativo</span>
+            </div>
+            <div class="card-body">
+              <div id="carta-lista"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-ventas">
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow">Análisis</div>
+            <h2>Ventas y tickets</h2>
+            <p class="section-copy">Filtra por fecha y franja horaria para revisar cierres, totales y detalle de artículos servidos sin salir del panel.</p>
+          </div>
+          <div class="mini-kicker">Histórico</div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-kicker">Filtros</div>
+              <div class="card-title">Rango de consulta</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="filtros-row">
+              <div class="filtro-grupo">
+                <span class="filtro-label">Fecha inicio</span>
+                <input type="date" id="filtro-fecha-ini" />
+              </div>
+              <div class="filtro-grupo">
+                <span class="filtro-label">Fecha fin</span>
+                <input type="date" id="filtro-fecha-fin" />
+              </div>
+              <div class="filtro-grupo">
+                <span class="filtro-label">Hora inicio</span>
+                <input type="time" id="filtro-hora-ini" value="00:00" />
+              </div>
+              <div class="filtro-grupo">
+                <span class="filtro-label">Hora fin</span>
+                <input type="time" id="filtro-hora-fin" value="23:59" />
+              </div>
+              <button class="btn btn-accent-inline" onclick="aplicarFiltros()">Filtrar</button>
+              <button class="btn" onclick="resetFiltros()">Hoy</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="resumen-ventas">
+          <div class="stat-box">
+            <div class="stat-box-num" id="stat-mesas">—</div>
+            <div class="stat-box-lbl">Mesas cerradas</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-num" id="stat-total">—</div>
+            <div class="stat-box-lbl">Total vendido</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-num" id="stat-media">—</div>
+            <div class="stat-box-lbl">Ticket medio</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-num" id="stat-lineas">—</div>
+            <div class="stat-box-lbl">Artículos servidos</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-kicker">Detalle</div>
+              <div class="card-title">Tickets del periodo</div>
+              <p class="card-desc">Cada ticket puede desplegarse para ver el desglose completo de líneas servidas.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="ventas-lista">
+              <div class="ventas-empty">Selecciona un rango de fechas y pulsa Filtrar</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-local">
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow">Identidad</div>
+            <h2>Datos del local</h2>
+            <p class="section-copy">Define la información que aparecerá en el ticket y ajusta el texto visible para el cliente final.</p>
+          </div>
+          <div class="mini-kicker">Impresión</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Ficha</div>
+                <div class="card-title">Información principal</div>
+                <p class="card-desc">Estos datos se usan en la cabecera y pie del ticket.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="field-stack">
+                <label for="local-nombre">Nombre del local</label>
+                <input type="text" id="local-nombre" placeholder="Ej: Bar El Rincón" />
+              </div>
+              <div class="field-stack" style="margin-top:10px">
+                <label for="local-direccion">Dirección</label>
+                <input type="text" id="local-direccion" placeholder="Dirección opcional" />
+              </div>
+              <div class="form-row" style="margin-top:10px">
+                <div class="field-stack" style="flex:1">
+                  <label for="local-telefono">Teléfono</label>
+                  <input type="text" id="local-telefono" placeholder="Teléfono opcional" />
+                </div>
+                <div class="field-stack" style="flex:1">
+                  <label for="local-cif">CIF / NIF</label>
+                  <input type="text" id="local-cif" placeholder="CIF / NIF opcional" />
+                </div>
+              </div>
+              <div class="field-stack">
+                <label for="local-footer">Pie de ticket</label>
+                <input type="text" id="local-footer" placeholder="Ej: Gracias por su visita" />
+              </div>
+              <div class="add-row">
+                <button class="btn btn-success" onclick="guardarLocal()">Guardar datos</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="stack">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-kicker">Referencia</div>
+                  <div class="card-title">Qué se imprime</div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="metric-strip">
+                  <div class="metric-mini">
+                    <strong>Nombre</strong>
+                    <span>Cabecera principal del ticket</span>
+                  </div>
+                  <div class="metric-mini">
+                    <strong>Dirección</strong>
+                    <span>Detalle opcional del local</span>
+                  </div>
+                  <div class="metric-mini">
+                    <strong>Footer</strong>
+                    <span>Mensaje final visible al cliente</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-kicker">Consejo</div>
+                  <div class="card-title">Textos cortos y claros</div>
+                  <p class="card-desc">Conviene usar un nombre limpio y un pie breve para que el ticket sea legible incluso en impresoras pequeñas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-enlaces">
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow">Equipo y acceso</div>
+            <h2>Enlaces, cuotas y seguridad</h2>
+            <p class="section-copy">Comparte accesos con el equipo, controla la disponibilidad del servicio y gestiona PINes y usuarios desde un mismo bloque.</p>
+          </div>
+          <div class="mini-kicker">Operación diaria</div>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Accesos</div>
+                <div class="card-title">Enlaces rápidos</div>
+                <p class="card-desc">Comparte las rutas clave con camareros, barra y cocina.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="nav-links">
+                <a class="nav-link" href="camarero.html"><span>Camarero / tomar nota</span><span>↗</span></a>
+                <a class="nav-link" href="barra.html"><span>Pantalla barra</span><span>↗</span></a>
+                <a class="nav-link" href="cocina.html"><span>Pantalla cocina</span><span>↗</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Consumo</div>
+                <div class="card-title">Líneas por mes</div>
+                <p class="card-desc">Seguimiento del uso de la herramienta en tiempo real.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="stats-lista" class="stack">
+                <div style="font-size:13px;color:var(--muted)">Cargando…</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Disponibilidad</div>
+                <div class="card-title">Líneas restantes</div>
+                <p class="card-desc">Cuando llegue a cero, se bloqueará el envío de nuevas comandas.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="metric-mini">
+                <strong id="quota-display">—</strong>
+                <span>Restantes en el periodo actual</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:1rem">
+          <div class="stack">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-kicker">Equipo</div>
+                  <div class="card-title">Camareros</div>
+                  <p class="card-desc">Cada camarero tiene nombre y PIN propio. Ese nombre se guarda en cada comanda enviada.</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div id="usuarios-lista" style="margin-bottom:1rem"></div>
+                <div class="form-row">
+                  <input type="text" id="usr-nombre" placeholder="Nombre, por ejemplo María" style="flex:2" />
+                  <input type="text" id="usr-pin" placeholder="PIN 4 dígitos" maxlength="4" inputmode="numeric" style="max-width:150px" />
+                  <button class="btn btn-success" onclick="addUsuario()">+ Añadir</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-kicker">Admin</div>
+                  <div class="card-title">Contraseña del panel</div>
+                  <p class="card-desc">Este cambio afecta al acceso visual a `admin.html` en el dispositivo actual.</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="form-row">
+                  <input type="password" id="new-pwd" placeholder="Nueva contraseña" />
+                  <button class="btn" onclick="changePwd()">Guardar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">PINes</div>
+                <div class="card-title">Acceso por rol</div>
+                <p class="card-desc">Cada pantalla puede pedir su propio PIN. Por defecto todos parten de <code>1234</code>.</p>
+              </div>
+            </div>
+            <div class="card-body stack">
+              <div class="form-row" style="align-items:center">
+                <label style="font-size:13px; min-width:110px">Camarero</label>
+                <input type="text" id="pin-camarero" placeholder="PIN (4 dígitos)" maxlength="4" pattern="[0-9]*" inputmode="numeric" style="max-width:160px" />
+                <button class="btn btn-success btn-sm" onclick="guardarPin('camarero')">Guardar</button>
+              </div>
+              <div class="form-row" style="align-items:center">
+                <label style="font-size:13px; min-width:110px">Barra</label>
+                <input type="text" id="pin-barra" placeholder="PIN (4 dígitos)" maxlength="4" pattern="[0-9]*" inputmode="numeric" style="max-width:160px" />
+                <button class="btn btn-success btn-sm" onclick="guardarPin('barra')">Guardar</button>
+              </div>
+              <div class="form-row" style="align-items:center">
+                <label style="font-size:13px; min-width:110px">Cocina</label>
+                <input type="text" id="pin-cocina" placeholder="PIN (4 dígitos)" maxlength="4" pattern="[0-9]*" inputmode="numeric" style="max-width:160px" />
+                <button class="btn btn-success btn-sm" onclick="guardarPin('cocina')">Guardar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="admin.js"></script>
+</body>
+</html>
