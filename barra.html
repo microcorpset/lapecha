@@ -1,9 +1,35 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title id="page-title">Barra · Comandero</title>
+<meta name="theme-color" content="#09101d" id="theme-color-meta">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Barra" id="apple-mobile-title">
+<link rel="manifest" href="manifest-barra.webmanifest" id="app-manifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/barra-192.png" id="app-icon">
+<link rel="apple-touch-icon" href="icons/barra-180.png" id="apple-touch-icon">
+<script>
+  (function () {
+    var esCocina = location.pathname.includes('cocina') || location.search.includes('rol=cocina');
+    if (!esCocina) return;
+    var title = document.getElementById('page-title');
+    var manifest = document.getElementById('app-manifest');
+    var icon = document.getElementById('app-icon');
+    var appleIcon = document.getElementById('apple-touch-icon');
+    var appleTitle = document.getElementById('apple-mobile-title');
+    var theme = document.getElementById('theme-color-meta');
+    if (title) title.textContent = 'Comandero - Cocina';
+    if (manifest) manifest.setAttribute('href', 'manifest-cocina.webmanifest');
+    if (icon) icon.setAttribute('href', 'icons/cocina-192.png');
+    if (appleIcon) appleIcon.setAttribute('href', 'icons/cocina-180.png');
+    if (appleTitle) appleTitle.setAttribute('content', 'Cocina');
+    if (theme) theme.setAttribute('content', '#071522');
+    document.title = 'Comandero - Cocina';
+  })();
+</script>
+<title id="page-title">Comandero - Barra</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -393,7 +419,7 @@
       <button class="pin-key" data-k="9">9</button>
       <button class="pin-key empty" data-k=""></button>
       <button class="pin-key" data-k="0">0</button>
-      <button class="pin-key del" data-k="del">⌫</button>
+      <button class="pin-key del" data-k="del">DEL</button>
     </div>
   </div>
 </div>
@@ -413,11 +439,11 @@
     <div class="wake-track" id="wake-track"><div class="wake-thumb"></div></div>
     <span>Wake</span>
   </label>
-  <label class="print-toggle" title="Imprimir automáticamente al llegar un pedido">
+  <label class="print-toggle" title="Imprimir automaticamente al llegar un pedido">
     <div class="toggle-track" id="print-track"><div class="toggle-thumb"></div></div>
     <span>Print</span>
   </label>
-  <label class="print-toggle" title="Generar TXT para autoimpresión sin diálogo">
+  <label class="print-toggle" title="Generar TXT para autoimpresion sin dialogo">
     <div class="toggle-track" id="txt-track"><div class="toggle-thumb"></div></div>
     <span>TXT</span>
   </label>
@@ -429,7 +455,7 @@
         <option value="dark">Oscuro</option>
         <option value="light">Claro</option>
       </select>
-      <label class="prefs-label" for="font-select">Tamaño letra</label>
+      <label class="prefs-label" for="font-select">Tamano letra</label>
       <select id="font-select">
         <option value="0.9">Compacto</option>
         <option value="1">Normal</option>
@@ -446,12 +472,12 @@
   <div class="bulk-banner" id="bulk-banner">
     <div class="bulk-text" id="bulk-text"></div>
     <button class="bulk-btn primary" id="bulk-serve-btn">Marcar grupo servido</button>
-    <button class="bulk-btn" id="bulk-clear-btn">Quitar selección</button>
+    <button class="bulk-btn" id="bulk-clear-btn">Quitar seleccion</button>
   </div>
 
   <div id="pedidos-container">
     <div class="empty-state" id="empty-state">
-      <div class="empty-icon">•</div>
+      <div class="empty-icon">*</div>
       <span class="empty-text">Sin pedidos pendientes</span>
     </div>
     <div class="pedidos-grid" id="pedidos-grid" style="display:none"></div>
@@ -461,3 +487,4 @@
 <script type="module" src="barra.js"></script>
 </body>
 </html>
+

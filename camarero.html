@@ -1,9 +1,16 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>🍽️ Comandero · Camarero</title>
+<meta name="theme-color" content="#111a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Camarero">
+<link rel="manifest" href="manifest-camarero.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/camarero-192.png">
+<link rel="apple-touch-icon" href="icons/camarero-180.png">
+<title>Comandero - Camarero</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -389,7 +396,7 @@
     .print-toggle{gap:2px; padding:5px 6px; flex:0 0 auto}
     .quota-badge{display:none !important}
     .resumen-info{cursor:pointer}
-    .resumen-total::after{content:' ›'; color:var(--accent2)}
+    .resumen-total::after{content:' >'; color:var(--accent2)}
     .tablet-cats{display:none !important}
   }
 
@@ -477,7 +484,7 @@
 <div id="pin-screen">
   <div class="pin-box">
     <div class="pin-logo">
-      <div class="pin-logo-icon">🍽️</div>
+      <div class="pin-logo-icon">C</div>
       <div class="pin-title">Comandero</div>
     </div>
     <div class="pin-sub" id="pin-sub">Introduce tu PIN</div>
@@ -500,7 +507,7 @@
       <button class="pin-key" data-k="9">9</button>
       <button class="pin-key empty" data-k=""></button>
       <button class="pin-key" data-k="0">0</button>
-      <button class="pin-key del" data-k="del">⌫</button>
+      <button class="pin-key del" data-k="del">DEL</button>
     </div>
   </div>
 </div>
@@ -515,7 +522,7 @@
 
 <div class="app-shell">
   <div class="topbar">
-    <span class="topbar-logo">🍽️</span>
+    <span class="topbar-logo">C</span>
     <span class="topbar-title">Comandero</span>
     <span class="mesa-badge" id="topbar-mesa"></span>
     <span id="topbar-camarero"></span>
@@ -528,13 +535,13 @@
       <div class="toggle-track" id="print-track"><div class="toggle-thumb"></div></div>
       <span>PDF</span>
     </label>
-    <label class="print-toggle" title="Generar TXT para autoimpresión">
+    <label class="print-toggle" title="Generar TXT para autoimpresion">
       <div class="toggle-track" id="txt-track"><div class="toggle-thumb"></div></div>
       <span>TXT</span>
     </label>
     <span class="quota-badge" id="quota-badge"></span>
     <button class="btn-carrito" id="btn-carrito" onclick="abrirDrawer()">
-      🧾 <span id="carrito-label">0</span>
+      Lista <span id="carrito-label">0</span>
       <span class="carrito-count" id="carrito-count">0</span>
     </button>
   </div>
@@ -544,34 +551,34 @@
       <div>
         <div class="page-kicker">Sala</div>
         <h2 class="page-title">Selecciona una mesa</h2>
-        <p class="page-copy">Empieza por la mesa, abre su cuenta y envía la comanda a barra o cocina sin salir de esta pantalla.</p>
+        <p class="page-copy">Empieza por la mesa, abre su cuenta y envia la comanda a barra o cocina sin salir de esta pantalla.</p>
     </div>
     <div class="page-meta">Servicio activo</div>
   </div>
-    <div class="mesas-grid" id="mesas-grid"><div class="loading">Cargando…</div></div>
+    <div class="mesas-grid" id="mesas-grid"><div class="loading">Cargando...</div></div>
     <div class="mesas-links">
       <div class="mesas-links-copy">Acceso directo al trabajo de barra y cocina, siempre fijo al final de la vista de mesas.</div>
       <div class="mesas-links-actions">
-        <a class="mesas-link-btn barra" href="barra.html">🍺 Barra</a>
-        <a class="mesas-link-btn cocina" href="cocina.html">🍳 Cocina</a>
+        <a class="mesas-link-btn barra" href="barra.html">Barra</a>
+        <a class="mesas-link-btn cocina" href="cocina.html">Cocina</a>
       </div>
     </div>
   </div>
 
   <div id="view-carta">
     <div class="tablet-cats" id="tablet-cats"></div>
-    <div class="carta-scroll" id="carta-body"><div class="loading">Cargando carta…</div></div>
+    <div class="carta-scroll" id="carta-body"><div class="loading">Cargando carta...</div></div>
 
     <button id="btn-cats" onclick="toggleCatsPanel()"
-      style="position:fixed;left:1rem;bottom:98px;z-index:25;background:var(--accent);color:#fff;border:none;border-radius:50%;width:46px;height:46px;font-size:18px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.18);display:none;align-items:center;justify-content:center">☰</button>
+      style="position:fixed;left:1rem;bottom:98px;z-index:25;background:var(--accent);color:#fff;border:none;border-radius:50%;width:46px;height:46px;font-size:18px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.18);display:none;align-items:center;justify-content:center">|||</button>
     <div id="cats-panel"
       style="display:none;position:fixed;left:1rem;bottom:150px;z-index:26;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.15);min-width:180px;overflow:hidden;max-height:60vh;overflow-y:auto"></div>
 
     <div class="bottom-bar">
-      <button class="btn btn-back" onclick="volverMesas()">← Mesas</button>
+      <button class="btn btn-back" onclick="volverMesas()">< Mesas</button>
       <div class="resumen-info">
-        <div class="resumen-lineas" id="res-lineas">Sin artículos</div>
-        <div class="resumen-total" id="res-total">0,00 €</div>
+        <div class="resumen-lineas" id="res-lineas">Sin articulos</div>
+        <div class="resumen-total" id="res-total">0,00 EUR</div>
       </div>
       <button class="btn btn-cuenta" id="btn-cuenta" onclick="verCuenta()" style="display:none">Cuenta</button>
       <button class="btn btn-enviar" id="btn-enviar" disabled onclick="enviarPedido()">Enviar</button>
@@ -580,7 +587,7 @@
 
   <div id="view-ticket">
     <div style="display:flex;gap:10px;margin-bottom:1rem;align-items:center;padding:0 4px">
-      <button class="btn btn-back" onclick="show('carta')">← Volver</button>
+      <button class="btn btn-back" onclick="show('carta')">< Volver</button>
       <span style="font-family:var(--mono);font-size:13px;color:var(--muted)">Cuenta</span>
     </div>
     <div><div class="ticket-card" id="ticket-card"></div></div>
@@ -592,11 +599,11 @@
   <div class="drawer-handle"></div>
   <div class="drawer-header">
     <span class="drawer-title" id="drawer-title">Pedido</span>
-    <button class="drawer-close" onclick="cerrarDrawer()">×</button>
+    <button class="drawer-close" onclick="cerrarDrawer()">X</button>
   </div>
-  <div class="drawer-body" id="drawer-body"><div class="drawer-empty">Sin artículos aún</div></div>
+  <div class="drawer-body" id="drawer-body"><div class="drawer-empty">Sin articulos aun</div></div>
   <div class="drawer-footer">
-    <span class="drawer-total" id="drawer-total">0,00 €</span>
+    <span class="drawer-total" id="drawer-total">0,00 EUR</span>
     <button class="btn-enviar-drawer" id="btn-enviar-drawer" disabled onclick="enviarPedido()">Enviar pedido</button>
   </div>
 </div>
@@ -604,3 +611,4 @@
 <script type="module" src="camarero.js"></script>
 </body>
 </html>
+
