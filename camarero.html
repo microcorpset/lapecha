@@ -211,6 +211,8 @@
   .mesa-estado{font-size:11px;color:var(--muted);font-weight:400}
   .mesa-btn.ocupada .mesa-estado{color:var(--accent2);font-weight:500}
   .mesa-alerta-info{font-size:10px;display:flex;align-items:center;gap:3px;color:var(--muted);margin-top:2px}
+  .mesa-resumen{font-size:10px;color:var(--muted);text-align:center;line-height:1.35}
+  .mesa-resumen strong{color:var(--text);font-weight:600}
 
   #view-carta{display:none}
   .carta-shell{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
@@ -334,6 +336,15 @@
   .nota-verificado{display:inline-block;font-size:10px;color:var(--success);font-family:var(--mono);margin-top:2px}
   .btn-quitar-linea{background:none;border:none;color:var(--danger);font-size:20px;cursor:pointer;padding:0 4px;line-height:1;flex-shrink:0;opacity:.65}
   .ticket-linea-edit{display:flex;align-items:center;gap:8px}
+  .btn-edit-ticket{background:none;color:var(--warn);border-color:rgba(217,119,6,.28)}
+  .ticket-qty-edit{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .ticket-qty-btn{
+    width:30px;height:30px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--text);
+    display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;cursor:pointer
+  }
+  .ticket-qty-btn:disabled{opacity:.3;cursor:default}
+  .ticket-qty-num{font-family:var(--mono);font-size:13px;color:var(--text);min-width:34px;text-align:center}
+  .ticket-linea-precio{font-family:var(--mono)}
 
   .mesas-links{
     margin-top:14px;
@@ -484,7 +495,7 @@
 <div id="pin-screen">
   <div class="pin-box">
     <div class="pin-logo">
-      <div class="pin-logo-icon">C</div>
+      <div class="pin-logo-icon">🗒</div>
       <div class="pin-title">Comandero</div>
     </div>
     <div class="pin-sub" id="pin-sub">Introduce tu PIN</div>
@@ -522,7 +533,7 @@
 
 <div class="app-shell">
   <div class="topbar">
-    <span class="topbar-logo">C</span>
+    <span class="topbar-logo">🗒</span>
     <span class="topbar-title">Comandero</span>
     <span class="mesa-badge" id="topbar-mesa"></span>
     <span id="topbar-camarero"></span>
@@ -557,7 +568,7 @@
   </div>
     <div class="mesas-grid" id="mesas-grid"><div class="loading">Cargando...</div></div>
     <div class="mesas-links">
-      <div class="mesas-links-copy">Acceso directo al trabajo de barra y cocina, siempre fijo al final de la vista de mesas.</div>
+      <div class="mesas-links-copy">Acceso directo al trabajo de barra y cocina.</div>
       <div class="mesas-links-actions">
         <a class="mesas-link-btn barra" href="barra.html">Barra</a>
         <a class="mesas-link-btn cocina" href="cocina.html">Cocina</a>
@@ -588,6 +599,7 @@
   <div id="view-ticket">
     <div style="display:flex;gap:10px;margin-bottom:1rem;align-items:center;padding:0 4px">
       <button class="btn btn-back" onclick="show('carta')">< Volver</button>
+      <button class="btn btn-edit-ticket" id="btn-edit-ticket" onclick="toggleEditarCuenta()">Editar cuenta</button>
       <span style="font-family:var(--mono);font-size:13px;color:var(--muted)">Cuenta</span>
     </div>
     <div><div class="ticket-card" id="ticket-card"></div></div>
