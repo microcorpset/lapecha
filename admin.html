@@ -451,6 +451,11 @@
 
   .row-item:last-child { border-bottom: none; }
   .row-label { flex: 1; font-size: 14px; }
+
+  @media (max-width: 767px) {
+    .row-item { flex-wrap: wrap; gap: 6px 8px; }
+    .row-item > div:first-child { flex-basis: 100%; min-width: 0; }
+  }
   .row-sub {
     color: var(--muted);
     font-size: 12px;
@@ -917,9 +922,15 @@
                 </div>
               </div>
               <div class="card-body">
-                <div class="field-stack">
-                  <label for="nueva-mesa">Nombre de la mesa</label>
-                  <input type="text" id="nueva-mesa" placeholder="Ej: 4, Terraza 1, Barra" />
+                <div class="form-grid">
+                  <div class="field-stack">
+                    <label for="nueva-mesa">Nombre de la mesa</label>
+                    <input type="text" id="nueva-mesa" placeholder="Ej: 4, Terraza 1, Barra" />
+                  </div>
+                  <div class="field-stack">
+                    <label for="nueva-mesa-zona">Zona (opcional)</label>
+                    <input type="text" id="nueva-mesa-zona" placeholder="Ej: Interior, Terraza" />
+                  </div>
                 </div>
                 <div class="add-row">
                   <button class="btn btn-success" onclick="addMesa()">+ Añadir mesa</button>
@@ -1070,6 +1081,7 @@
               </div>
               <button class="btn btn-accent-inline" onclick="aplicarFiltros()">Filtrar</button>
               <button class="btn" onclick="resetFiltros()">Hoy</button>
+              <button class="btn" onclick="exportarCSV()" title="Descargar CSV del período filtrado">⬇ CSV</button>
             </div>
           </div>
         </div>
@@ -1097,13 +1109,24 @@
           <div class="card-header">
             <div>
               <div class="card-kicker">Detalle</div>
-              <div class="card-title">Tickets del periodo</div>
-              <p class="card-desc">Cada ticket puede desplegarse para ver el desglose completo de líneas servidas.</p>
+              <div class="card-title">Resultados</div>
+            </div>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-sm ventas-tab-btn active" onclick="mostrarTabVentas('tickets',this)">Por ticket</button>
+              <button class="btn btn-sm ventas-tab-btn" onclick="mostrarTabVentas('articulos',this)">Por artículo</button>
             </div>
           </div>
           <div class="card-body">
-            <div id="ventas-lista">
-              <div class="ventas-empty">Selecciona un rango de fechas y pulsa Filtrar</div>
+            <div id="ventas-por-ticket">
+              <div id="ventas-lista">
+                <div class="ventas-empty">Selecciona un rango de fechas y pulsa Filtrar</div>
+              </div>
+              <div style="text-align:center;margin-top:12px">
+                <button id="btn-cargar-mas" class="btn btn-sm" onclick="cargarMasHistorial()" style="display:none">Cargar más registros</button>
+              </div>
+            </div>
+            <div id="ventas-por-articulo" style="display:none">
+              <div class="ventas-empty">Aplica un filtro primero</div>
             </div>
           </div>
         </div>
@@ -1190,6 +1213,54 @@
                   <div class="card-title">Textos cortos y claros</div>
                   <p class="card-desc">Conviene usar un nombre limpio y un pie breve para que el ticket sea legible incluso en impresoras pequeñas.</p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:1rem">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Operativa</div>
+                <div class="card-title">Umbrales de alerta de tiempo</div>
+                <p class="card-desc">Configura cuántos minutos tarda en cambiar el color de las mesas con pedidos pendientes.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="field-stack">
+                  <label for="alerta-verde">Minutos para alerta amarilla</label>
+                  <input type="number" id="alerta-verde" value="10" min="1" max="60" />
+                </div>
+                <div class="field-stack">
+                  <label for="alerta-amarillo">Minutos para alerta roja</label>
+                  <input type="number" id="alerta-amarillo" value="20" min="2" max="120" />
+                </div>
+              </div>
+              <div class="add-row">
+                <button class="btn btn-success" onclick="guardarAlertas()">Guardar umbrales</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Servicio</div>
+                <div class="card-title">Gestión de turno</div>
+                <p class="card-desc">Abre y cierra turnos para agrupar ventas por período. Al cerrar se guarda un resumen en el historial.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div style="font-family:var(--mono);font-size:13px;margin-bottom:12px" id="turno-status">Sin turno activo</div>
+              <div class="field-stack" style="margin-bottom:10px">
+                <label for="turno-nombre">Nombre del turno</label>
+                <input type="text" id="turno-nombre" placeholder="Ej: Comida, Cena, Tarde" />
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button id="btn-abrir-turno" class="btn btn-success" onclick="abrirTurno()">Abrir turno</button>
+                <button id="btn-cerrar-turno" class="btn btn-danger" onclick="cerrarTurno()" disabled>Cerrar turno</button>
               </div>
             </div>
           </div>

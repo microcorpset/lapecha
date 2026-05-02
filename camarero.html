@@ -438,6 +438,54 @@
     .tablet-cat-count{font-family:var(--mono); font-size:11px; background:rgba(61,122,255,.12); color:var(--accent2); padding:2px 7px; border-radius:20px}
   }
 
+  /* Art agotado */
+  .art-agotado { opacity: .55; }
+  .art-agotado .art-nombre { text-decoration: line-through; }
+  .art-agotado .qty-btn { pointer-events: none; opacity: .25; }
+  .art-agotado .qty-num { opacity: .25; }
+
+  /* Allergen button & panel */
+  .btn-alergenos {
+    width: 30px; height: 30px; border: 1px solid rgba(217,119,6,.28);
+    background: rgba(217,119,6,.07); border-radius: 8px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
+    flex-shrink: 0; transition: background .1s;
+  }
+  .btn-alergenos:hover { background: rgba(217,119,6,.15); }
+  .alergenos-panel {
+    padding: 6px 14px 10px; font-size: 11px; color: var(--warn);
+    background: rgba(217,119,6,.06); border-top: 1px solid rgba(217,119,6,.12);
+    border-radius: 0 0 18px 18px; line-height: 1.6;
+  }
+
+  /* Zone grouping */
+  .zona-group { margin-bottom: 1.5rem; }
+  .zona-nombre {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: .12em; color: var(--muted); margin-bottom: .6rem; padding: 0 4px;
+  }
+
+  /* Mobile category filter bar */
+  #cat-filter-bar {
+    display: none; padding: 8px 0 4px; position: sticky; top: 62px; z-index: 20;
+  }
+  #cat-filter-sel {
+    width: 100%; padding: 10px 14px; border-radius: 14px;
+    border: 1px solid var(--border-strong);
+    background: rgba(255,255,255,.90); backdrop-filter: blur(12px);
+    font-family: var(--mono); font-size: 13px; color: var(--text);
+    -webkit-appearance: none; appearance: none;
+    box-shadow: 0 4px 16px rgba(18,27,49,.1);
+  }
+
+  /* Offline banner */
+  #offline-banner {
+    display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+    background: rgba(226,77,77,.92); color: #fff; text-align: center;
+    padding: 10px 1rem; font-family: var(--mono); font-size: 13px;
+    backdrop-filter: blur(8px); align-items: center; justify-content: center;
+  }
+
   @media print{
     body{
       margin:0 !important;
@@ -531,6 +579,8 @@
   </div>
 </div>
 
+<div id="offline-banner">📡 Sin conexión — los cambios se sincronizarán al reconectar</div>
+
 <div class="app-shell">
   <div class="topbar">
     <span class="topbar-logo">🗒</span>
@@ -578,6 +628,11 @@
 
   <div id="view-carta">
     <div class="tablet-cats" id="tablet-cats"></div>
+    <div id="cat-filter-bar">
+      <select id="cat-filter-sel" onchange="filtrarCategoria(this.value)">
+        <option value="">Todas las categorías</option>
+      </select>
+    </div>
     <div class="carta-scroll" id="carta-body"><div class="loading">Cargando carta...</div></div>
 
     <button id="btn-cats" onclick="toggleCatsPanel()"
