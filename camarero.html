@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest-camarero.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/camarero-192.png">
 <link rel="apple-touch-icon" href="icons/camarero-180.png">
-<title>Comandero - Camarero</title>
+<title>Comandero 2.5 - Camarero</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -459,7 +459,11 @@
   }
 
   /* Zone grouping */
-  .zona-group { margin-bottom: 1.5rem; }
+  .mesas-grid.zonas-layout{
+    grid-template-columns:minmax(0,1fr);
+    gap:18px;
+  }
+  .zona-group { width:100%; }
   .zona-nombre {
     font-family: var(--mono); font-size: 10px; text-transform: uppercase;
     letter-spacing: .12em; color: var(--muted); margin-bottom: .6rem; padding: 0 4px;
@@ -544,7 +548,7 @@
   <div class="pin-box">
     <div class="pin-logo">
       <div class="pin-logo-icon">🗒</div>
-      <div class="pin-title">Comandero</div>
+      <div class="pin-title">Comandero 2.5</div>
     </div>
     <div class="pin-sub" id="pin-sub">Introduce tu PIN</div>
     <div class="pin-dots">
@@ -584,7 +588,7 @@
 <div class="app-shell">
   <div class="topbar">
     <span class="topbar-logo">🗒</span>
-    <span class="topbar-title">Comandero</span>
+    <span class="topbar-title">Comandero 2.5</span>
     <span class="mesa-badge" id="topbar-mesa"></span>
     <span id="topbar-camarero"></span>
     <div class="spacer"></div>
@@ -678,4 +682,3 @@
 <script type="module" src="camarero.js"></script>
 </body>
 </html>
-

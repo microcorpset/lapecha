@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest-admin.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/admin-192.png">
 <link rel="apple-touch-icon" href="icons/admin-180.png">
-<title>Comandero - Admin</title>
+<title>Comandero 2.5 - Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -748,6 +748,62 @@
     border-radius: 20px;
     background: rgba(255,255,255,0.02);
   }
+  .turno-live-grid,
+  .turno-history-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .turno-card {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1rem 1.05rem;
+    background: rgba(255,255,255,0.03);
+  }
+  .turno-card-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: start;
+    margin-bottom: 10px;
+  }
+  .turno-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .turno-card-meta {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .turno-badge {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 9px;
+    background: rgba(255,255,255,0.05);
+    color: var(--muted-strong);
+    font-family: var(--mono);
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  .turno-badge.activo {
+    color: var(--success);
+    border-color: rgba(113, 255, 176, 0.22);
+    background: rgba(113, 255, 176, 0.1);
+  }
+  .turno-stat strong {
+    display: block;
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--accent);
+  }
+  .turno-stat span {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 11px;
+  }
 
   .metric-strip {
     display: grid;
@@ -839,7 +895,7 @@
       <div>
         <div class="login-kicker">Panel de control</div>
         <h1 class="login-title">Gestiona el local sin perder <em>ritmo</em>.</h1>
-        <p class="login-copy">Mesas, carta, ventas, accesos y configuración del negocio en un solo panel. Todo con la misma lógica de Comandero, pero con una vista más clara para el día a día.</p>
+        <p class="login-copy">Mesas, carta, ventas, accesos y configuración del negocio en un solo panel. Todo con la misma lógica de Comandero 2.5, pero con una vista más clara para el día a día.</p>
       </div>
       <div class="login-points">
         <div class="login-point">
@@ -858,7 +914,7 @@
     </section>
 
     <div class="login-box">
-      <div class="login-logo">// admin</div>
+      <div class="login-logo">// admin 2.5</div>
       <p class="login-sub">Accede al panel de administración para configurar el local y revisar el servicio.</p>
       <input type="password" id="pwd-input" placeholder="Contraseña" />
       <div class="login-error" id="login-error">Contraseña incorrecta</div>
@@ -881,8 +937,8 @@
       </div>
       <div class="spacer"></div>
       <div class="topbar-side">
-        <span class="brand-chip">Comandero Control</span>
-        <span class="tag-version">v2.0</span>
+        <span class="brand-chip">Comandero Control 2.5</span>
+        <span class="tag-version">v2.5</span>
       </div>
     </div>
 
@@ -962,6 +1018,21 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:1rem">
+          <div class="card-header">
+            <div>
+              <div class="card-kicker">Impresión directa</div>
+              <div class="card-title">Servicio Python</div>
+              <p class="card-desc">Si arrancas el servicio tarde, puedes marcar las comandas y tickets finales pendientes como ya impresos para que no recupere trabajo antiguo.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="add-row">
+              <button class="btn" onclick="marcarPendientesComoImpresas()">Marcar pendientes como impresos</button>
+            </div>
+            <div class="helper-pill" style="margin-top:.75rem">Servicio esperado: <code>local-print-service-1</code></div>
           </div>
         </div>
       </section>
@@ -1049,7 +1120,7 @@
           <div>
             <div class="section-eyebrow">Análisis</div>
             <h2>Ventas y tickets</h2>
-            <p class="section-copy">Filtra por fecha y franja horaria para revisar cierres, totales y detalle de artículos servidos sin salir del panel.</p>
+            <p class="section-copy">Filtra por fecha y franja horaria para revisar cierres, totales y detalle de artículos servidos, por ticket, por artículo o por día sin salir del panel.</p>
           </div>
           <div class="mini-kicker">Histórico</div>
         </div>
@@ -1114,6 +1185,7 @@
             <div style="display:flex;gap:6px">
               <button class="btn btn-sm ventas-tab-btn active" onclick="mostrarTabVentas('tickets',this)">Por ticket</button>
               <button class="btn btn-sm ventas-tab-btn" onclick="mostrarTabVentas('articulos',this)">Por artículo</button>
+              <button class="btn btn-sm ventas-tab-btn" onclick="mostrarTabVentas('dias',this)">Por días</button>
             </div>
           </div>
           <div class="card-body">
@@ -1126,6 +1198,9 @@
               </div>
             </div>
             <div id="ventas-por-articulo" style="display:none">
+              <div class="ventas-empty">Aplica un filtro primero</div>
+            </div>
+            <div id="ventas-por-dia" style="display:none">
               <div class="ventas-empty">Aplica un filtro primero</div>
             </div>
           </div>
@@ -1174,6 +1249,80 @@
                 <label for="local-footer">Pie de ticket</label>
                 <input type="text" id="local-footer" placeholder="Ej: Gracias por su visita" />
               </div>
+              <div class="field-stack" style="margin-top:10px">
+                <label for="local-ticket-logo">Logo del ticket</label>
+                <input type="text" id="local-ticket-logo" placeholder="URL o data:image del logo" />
+              </div>
+              <div class="field-stack" style="margin-top:10px">
+                <label for="local-ticket-paper">Papel del ticket</label>
+                <select id="local-ticket-paper">
+                  <option value="58mm">58 mm</option>
+                  <option value="80mm">80 mm</option>
+                </select>
+              </div>
+              <div class="form-row" style="margin-top:10px">
+                <div class="field-stack" style="flex:1">
+                  <label for="local-ticket-font-size">Tamaño letra ticket cliente</label>
+                  <input type="number" id="local-ticket-font-size" min="8" max="16" step="0.5" value="9" />
+                </div>
+                <div class="field-stack" style="flex:1">
+                  <label for="local-ticket-uppercase">Texto en ticket</label>
+                  <select id="local-ticket-uppercase">
+                    <option value="false">Normal</option>
+                    <option value="true">Solo mayúsculas</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row" style="margin-top:10px">
+                <div class="field-stack" style="flex:1">
+                  <label for="local-ticket-margin-x">Margen lateral (mm)</label>
+                  <input type="number" id="local-ticket-margin-x" min="0" max="10" step="0.5" value="3" />
+                </div>
+                <div class="field-stack" style="flex:1">
+                  <label for="local-ticket-margin-y">Margen vertical (mm)</label>
+                  <input type="number" id="local-ticket-margin-y" min="0" max="10" step="0.5" value="3" />
+                </div>
+              </div>
+              <div class="form-row" style="margin-top:10px">
+                <div class="field-stack" style="flex:1">
+                  <label for="local-barra-font-size">Tamaño letra barra</label>
+                  <input type="number" id="local-barra-font-size" min="8" max="16" step="0.5" value="9" />
+                </div>
+                <div class="field-stack" style="flex:1">
+                  <label for="local-cocina-font-size">Tamaño letra cocina</label>
+                  <input type="number" id="local-cocina-font-size" min="8" max="16" step="0.5" value="9" />
+                </div>
+              </div>
+              <div class="form-row" style="margin-top:10px">
+                <div class="field-stack" style="flex:1">
+                  <label for="local-barra-uppercase">Texto barra</label>
+                  <select id="local-barra-uppercase">
+                    <option value="false">Normal</option>
+                    <option value="true">Solo mayúsculas</option>
+                  </select>
+                </div>
+                <div class="field-stack" style="flex:1">
+                  <label for="local-cocina-uppercase">Texto cocina</label>
+                  <select id="local-cocina-uppercase">
+                    <option value="false">Normal</option>
+                    <option value="true">Solo mayúsculas</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row" style="margin-top:10px">
+                <div class="field-stack" style="flex:1">
+                  <label for="local-ticket-print-mode">Impresión ticket final</label>
+                  <select id="local-ticket-print-mode">
+                    <option value="browser">Navegador (mas visual)</option>
+                    <option value="service">Servicio Python (mas nitido)</option>
+                    <option value="both">Ambos</option>
+                  </select>
+                </div>
+                <div class="field-stack" style="flex:1">
+                  <label for="local-ticket-print-service-id">ID del servicio Python</label>
+                  <input type="text" id="local-ticket-print-service-id" placeholder="local-print-service-1" />
+                </div>
+              </div>
               <div class="add-row">
                 <button class="btn btn-success" onclick="guardarLocal()">Guardar datos</button>
               </div>
@@ -1201,6 +1350,14 @@
                   <div class="metric-mini">
                     <strong>Footer</strong>
                     <span>Mensaje final visible al cliente</span>
+                  </div>
+                  <div class="metric-mini">
+                    <strong>Papel</strong>
+                    <span>Define si el ticket final sale en 58 mm o 80 mm</span>
+                  </div>
+                  <div class="metric-mini">
+                    <strong>Logo y estilo</strong>
+                    <span>Puedes dar más presencia al ticket con logo, tamaño y mayúsculas</span>
                   </div>
                 </div>
               </div>
@@ -1249,7 +1406,7 @@
               <div>
                 <div class="card-kicker">Servicio</div>
                 <div class="card-title">Gestión de turno</div>
-                <p class="card-desc">Abre y cierra turnos para agrupar ventas por período. Al cerrar se guarda un resumen en el historial.</p>
+                <p class="card-desc">Abre y cierra turnos para agrupar ventas por período. Aquí puedes ver el turno activo y abajo consultar el historial resumido de cada cierre.</p>
               </div>
             </div>
             <div class="card-body">
@@ -1262,7 +1419,41 @@
                 <button id="btn-abrir-turno" class="btn btn-success" onclick="abrirTurno()">Abrir turno</button>
                 <button id="btn-cerrar-turno" class="btn btn-danger" onclick="cerrarTurno()" disabled>Cerrar turno</button>
               </div>
+              <div id="turno-resumen-actual" style="margin-top:12px">
+                <div class="ventas-empty" style="padding:1.2rem 1rem">No hay turno activo</div>
+              </div>
             </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:1rem">
+          <div class="card-header">
+            <div>
+              <div class="card-kicker">Histórico</div>
+              <div class="card-title">Turnos cerrados</div>
+              <p class="card-desc">Resumen rápido de cada turno para revisar fechas, duración, mesas, artículos y total vendido.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="turnos-lista">
+              <div class="ventas-empty">Todavía no hay turnos cerrados</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:1rem">
+          <div class="card-header">
+            <div>
+              <div class="card-kicker">Impresión directa</div>
+              <div class="card-title">Servicio Python</div>
+              <p class="card-desc">Si arrancas el servicio tarde, puedes marcar las comandas y tickets finales pendientes como ya impresos para que no recupere trabajo antiguo.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="add-row">
+              <button class="btn" onclick="marcarPendientesComoImpresas()">Marcar pendientes como impresos</button>
+            </div>
+            <div class="helper-pill" style="margin-top:.75rem">Servicio esperado: <code>local-print-service-1</code></div>
           </div>
         </div>
       </section>
@@ -1324,6 +1515,22 @@
                 <span>Restantes en el periodo actual</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:1rem">
+          <div class="card-header">
+            <div>
+              <div class="card-kicker">Impresión directa</div>
+              <div class="card-title">Servicio Python</div>
+              <p class="card-desc">Si arrancas el servicio de impresión tarde, puedes marcar las comandas pendientes como ya impresas para que no saque tickets antiguos.</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="add-row">
+              <button class="btn" onclick="marcarPendientesComoImpresas()">Marcar pendientes como impresas</button>
+            </div>
+            <div class="helper-pill" style="margin-top:.75rem">Servicio esperado: <code>local-print-service-1</code></div>
           </div>
         </div>
 
