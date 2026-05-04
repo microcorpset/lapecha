@@ -488,6 +488,20 @@
     background: rgba(226,77,77,.92); color: #fff; text-align: center;
     padding: 10px 1rem; font-family: var(--mono); font-size: 13px;
     backdrop-filter: blur(8px); align-items: center; justify-content: center;
+    gap: 8px; transition: background .4s;
+  }
+  .offline-spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,.35); border-top-color: #fff;
+    border-radius: 50%; animation: spin .75s linear infinite; flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .mesa-sync-badge {
+    font-size: 9px; color: #d97706;
+    background: rgba(217,119,6,.13); border: 1px solid rgba(217,119,6,.32);
+    border-radius: 999px; padding: 2px 7px;
+    font-family: var(--mono); white-space: nowrap; margin-top: 1px;
   }
 
   @media print{
