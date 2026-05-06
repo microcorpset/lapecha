@@ -1445,15 +1445,84 @@
           <div class="card-header">
             <div>
               <div class="card-kicker">Impresión directa</div>
-              <div class="card-title">Servicio Python</div>
-              <p class="card-desc">Si arrancas el servicio tarde, puedes marcar las comandas y tickets finales pendientes como ya impresos para que no recupere trabajo antiguo.</p>
+              <div class="card-title">Servicio Python — control y configuración</div>
+              <p class="card-desc">Pausa o reanuda el servicio de impresión sin reiniciarlo. Configura el nombre y papel de cada impresora desde aquí, sin editar archivos.</p>
             </div>
+            <span class="card-badge" id="ps-badge-status">Cargando</span>
           </div>
           <div class="card-body">
-            <div class="add-row">
-              <button class="btn" onclick="marcarPendientesComoImpresas()">Marcar pendientes como impresos</button>
+
+            <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;padding:10px 0 14px;border-bottom:1px solid var(--border)">
+              <div id="ps-pausa-indicator" style="display:flex;align-items:center;gap:.55rem;font-family:var(--mono);font-size:13px">
+                <span id="ps-pausa-dot" style="width:10px;height:10px;border-radius:50%;background:var(--success);display:inline-block;flex-shrink:0"></span>
+                <span id="ps-pausa-label">Activo</span>
+              </div>
+              <button id="btn-toggle-pausa" class="btn" onclick="togglePausaImpresion()">Pausar impresión</button>
+              <button class="btn btn-sm" onclick="marcarPendientesComoImpresas()" style="margin-left:auto">Marcar pendientes como impresos</button>
             </div>
-            <div class="helper-pill" style="margin-top:.75rem">Servicio esperado: <code>local-print-service-1</code></div>
+
+            <div style="margin-top:1.1rem">
+              <div style="font-size:11px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.85rem">Impresoras por destino</div>
+
+              <div style="padding:0 0 14px;border-bottom:1px solid var(--border);margin-bottom:14px">
+                <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;font-family:var(--mono)">BARRA</div>
+                <div class="form-grid">
+                  <div class="field-stack">
+                    <label for="ps-barra-printer">Nombre de impresora</label>
+                    <input type="text" id="ps-barra-printer" placeholder="Vacío = impresora predeterminada" />
+                  </div>
+                  <div class="field-stack">
+                    <label for="ps-barra-paper">Papel</label>
+                    <select id="ps-barra-paper"><option value="58mm">58 mm</option><option value="80mm">80 mm</option></select>
+                  </div>
+                </div>
+                <div class="form-row" style="margin-top:8px;align-items:center;gap:10px">
+                  <label style="font-size:12px;color:var(--muted);min-width:50px">Activa</label>
+                  <select id="ps-barra-enabled" style="max-width:130px"><option value="true">Sí</option><option value="false">No</option></select>
+                </div>
+              </div>
+
+              <div style="padding:0 0 14px;border-bottom:1px solid var(--border);margin-bottom:14px">
+                <div style="font-size:13px;font-weight:700;color:var(--info);margin-bottom:8px;font-family:var(--mono)">COCINA</div>
+                <div class="form-grid">
+                  <div class="field-stack">
+                    <label for="ps-cocina-printer">Nombre de impresora</label>
+                    <input type="text" id="ps-cocina-printer" placeholder="Vacío = impresora predeterminada" />
+                  </div>
+                  <div class="field-stack">
+                    <label for="ps-cocina-paper">Papel</label>
+                    <select id="ps-cocina-paper"><option value="58mm">58 mm</option><option value="80mm">80 mm</option></select>
+                  </div>
+                </div>
+                <div class="form-row" style="margin-top:8px;align-items:center;gap:10px">
+                  <label style="font-size:12px;color:var(--muted);min-width:50px">Activa</label>
+                  <select id="ps-cocina-enabled" style="max-width:130px"><option value="true">Sí</option><option value="false">No</option></select>
+                </div>
+              </div>
+
+              <div style="padding:0 0 14px">
+                <div style="font-size:13px;font-weight:700;color:var(--success);margin-bottom:8px;font-family:var(--mono)">TICKET AL CLIENTE</div>
+                <div class="form-grid">
+                  <div class="field-stack">
+                    <label for="ps-ticket-printer">Nombre de impresora</label>
+                    <input type="text" id="ps-ticket-printer" placeholder="Vacío = impresora predeterminada" />
+                  </div>
+                  <div class="field-stack">
+                    <label for="ps-ticket-paper">Papel</label>
+                    <select id="ps-ticket-paper"><option value="58mm">58 mm</option><option value="80mm">80 mm</option></select>
+                  </div>
+                </div>
+                <div class="form-row" style="margin-top:8px;align-items:center;gap:10px">
+                  <label style="font-size:12px;color:var(--muted);min-width:50px">Activa</label>
+                  <select id="ps-ticket-enabled" style="max-width:130px"><option value="true">Sí</option><option value="false">No</option></select>
+                </div>
+              </div>
+
+              <div class="add-row" style="margin-top:.25rem">
+                <button class="btn btn-success" onclick="guardarConfigImpresoras()">Guardar configuración de impresoras</button>
+                <span class="helper-pill">El servicio aplica los cambios en el próximo ciclo</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
