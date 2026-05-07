@@ -1370,6 +1370,16 @@
                   </select>
                 </div>
               </div>
+              <div class="field-stack" style="margin-top:10px">
+                <label for="local-comanda-auto-servir">Aceptación barra / cocina</label>
+                <select id="local-comanda-auto-servir">
+                  <option value="false">Requiere aceptación manual (comportamiento actual)</option>
+                  <option value="true">Pasa directamente a la cuenta al imprimir</option>
+                </select>
+                <p style="font-size:11px;color:var(--muted);margin-top:4px">
+                  Si está en "pasa directamente", las comandas enviadas a barra/cocina se registran en la cuenta en cuanto se imprimen, sin necesidad de aceptarlas desde la pantalla de barra o cocina.
+                </p>
+              </div>
               <div class="form-row" style="margin-top:10px">
                 <div class="field-stack" style="flex:1">
                   <label for="local-ticket-print-mode">Impresión ticket final</label>
