@@ -1316,7 +1316,7 @@
               </div>
               <div class="field-stack" style="margin-top:10px">
                 <label for="local-ticket-paper">Papel del ticket</label>
-                <select id="local-ticket-paper">
+                <select id="local-ticket-paper" onchange="syncTicketPaper('local')">
                   <option value="58mm">58 mm</option>
                   <option value="80mm">80 mm</option>
                 </select>
@@ -1580,7 +1580,7 @@
                   </div>
                   <div class="field-stack">
                     <label for="ps-ticket-paper">Papel</label>
-                    <select id="ps-ticket-paper"><option value="58mm">58 mm</option><option value="80mm">80 mm</option></select>
+                    <select id="ps-ticket-paper" onchange="syncTicketPaper('ps')"><option value="58mm">58 mm</option><option value="80mm">80 mm</option></select>
                   </div>
                 </div>
                 <div class="form-row" style="margin-top:8px;align-items:center;gap:10px">
