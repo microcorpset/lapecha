@@ -1401,6 +1401,19 @@
                   <input type="text" id="local-ticket-print-service-id" placeholder="local-print-service-1" />
                 </div>
               </div>
+              <div class="form-row" style="margin-top:10px">
+                <div class="field-stack" style="flex:1">
+                  <label for="local-barra-print-service-id">ID servicio barra</label>
+                  <input type="text" id="local-barra-print-service-id" placeholder="barra-print-service-1" />
+                </div>
+                <div class="field-stack" style="flex:1">
+                  <label for="local-cocina-print-service-id">ID servicio cocina</label>
+                  <input type="text" id="local-cocina-print-service-id" placeholder="cocina-print-service-1" />
+                </div>
+              </div>
+              <p style="font-size:11px;color:var(--muted);margin-top:6px">
+                Si barra y cocina imprimen desde equipos distintos, asigna aquí un ID distinto a cada servicio para que cada uno procese solo su rol.
+              </p>
               <div class="add-row">
                 <button class="btn btn-success" onclick="guardarLocal()">Guardar datos</button>
               </div>
