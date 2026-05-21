@@ -558,6 +558,19 @@
     margin-top: 1rem;
   }
 
+  .toggle-track {
+    width: 42px; height: 24px; border-radius: 99px;
+    background: var(--surface3); border: 1px solid var(--border-strong);
+    position: relative; cursor: pointer; transition: background .2s;
+    flex-shrink: 0;
+  }
+  .toggle-track.active { background: var(--accent); border-color: var(--accent); }
+  .toggle-thumb {
+    width: 18px; height: 18px; border-radius: 50%; background: var(--muted);
+    position: absolute; top: 2px; left: 2px; transition: transform .2s, background .2s;
+  }
+  .toggle-track.active .toggle-thumb { transform: translateX(18px); background: #000; }
+
   .helper-pill,
   .inline-note {
     display: inline-flex;
@@ -953,6 +966,8 @@
         <button class="tab-btn" onclick="showTab('carta',this)">Carta</button>
         <button class="tab-btn" onclick="showTab('ventas',this)">Ventas</button>
         <button class="tab-btn" onclick="showTab('local',this)">Local</button>
+        <button class="tab-btn" onclick="showTab('verifactu',this)">Verifactu</button>
+        <button class="tab-btn" onclick="showTab('auditoria',this)">Auditoría</button>
         <button class="tab-btn" onclick="showTab('enlaces',this)">Accesos</button>
       </div>
       <div class="spacer"></div>
@@ -1618,6 +1633,251 @@
         </div>
       </section>
 
+      <section class="section" id="sec-verifactu">
+        <div class="section-head">
+          <div>
+            <div class="section-eyebrow">Fiscalidad</div>
+            <h2>Verifactu (AEAT)</h2>
+            <p class="section-copy">Emite facturas verificables con la AEAT mediante la API de Verifacti. Cumple con el Reglamento Verifactu (RD 1007/2023). Configura tu API Key y series de numeración, luego activa Verifactu desde el camarero al cobrar.</p>
+          </div>
+          <div class="mini-kicker">Reglamento Verifactu</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Conexión</div>
+                <div class="card-title">API Verifacti</div>
+                <p class="card-desc">Obtén tu API Key en verifacti.com. La URL base ya está preconfigurada.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="field-wrap">
+                  <label class="field-label">Estado</label>
+                  <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:4px">
+                    <div class="toggle-track" id="vf-enabled-track" onclick="toggleVfEnabled()"><div class="toggle-thumb"></div></div>
+                    <span id="vf-enabled-label" style="font-family:var(--mono);font-size:13px">Desactivado</span>
+                  </label>
+                </div>
+                <div class="field-wrap">
+                  <label class="field-label">API Key</label>
+                  <input type="password" id="vf-apikey" placeholder="sk-xxxxxxxxxxxx" />
+                </div>
+                <div class="field-wrap">
+                  <label class="field-label">URL base API</label>
+                  <input type="text" id="vf-apiurl" placeholder="https://api.verifacti.com" />
+                </div>
+                <div class="field-wrap">
+                  <label class="field-label">IVA por defecto (%)</label>
+                  <input type="number" id="vf-iva" min="0" max="100" step="1" placeholder="10" />
+                  <span class="inline-note">10% es el IVA estándar para hostelería (consumiciones en local).</span>
+                </div>
+                <div class="field-wrap" style="grid-column:1/-1">
+                  <label class="field-label">Descripción por defecto</label>
+                  <input type="text" id="vf-desc" placeholder="Consumición en local" />
+                </div>
+              </div>
+              <div class="add-row" style="margin-top:1rem">
+                <button class="btn btn-success" onclick="guardarConfigVf()">Guardar configuración</button>
+                <button class="btn" onclick="testearApiVf()">Probar conexión</button>
+              </div>
+              <div id="vf-test-result" style="margin-top:8px;font-family:var(--mono);font-size:12px;display:none"></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Series</div>
+                <div class="card-title">Numeración de facturas</div>
+                <p class="card-desc">Cada tipo de factura tiene su propia serie y contador correlativo. El número se incrementa automáticamente con cada emisión.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="field-wrap">
+                  <label class="field-label">Serie simplificada (F2)</label>
+                  <input type="text" id="vf-serie-simp" placeholder="SIMP" maxlength="20" />
+                  <span class="inline-note" id="vf-next-simp">Contador: —</span>
+                </div>
+                <div class="field-wrap">
+                  <label class="field-label">Serie completa (F1)</label>
+                  <input type="text" id="vf-serie-fact" placeholder="FACT" maxlength="20" />
+                  <span class="inline-note" id="vf-next-fact">Contador: —</span>
+                </div>
+                <div class="field-wrap">
+                  <label class="field-label">Serie rectificativa (Rx)</label>
+                  <input type="text" id="vf-serie-rect" placeholder="RECT" maxlength="20" />
+                  <span class="inline-note" id="vf-next-rect">Contador: —</span>
+                </div>
+                <div class="field-wrap">
+                  <label class="field-label">Serie sustitutiva (F3)</label>
+                  <input type="text" id="vf-serie-sust" placeholder="SUST" maxlength="20" />
+                  <span class="inline-note" id="vf-next-sust">Contador: —</span>
+                </div>
+              </div>
+              <div class="add-row" style="margin-top:1rem">
+                <button class="btn btn-success" onclick="guardarConfigVf()">Guardar series</button>
+                <button class="btn" onclick="recargarContadores()">Actualizar contadores</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:1rem">
+          <div class="card-header">
+            <div>
+              <div class="card-kicker">Historial</div>
+              <div class="card-title">Facturas Verifactu emitidas</div>
+              <p class="card-desc">Todas las facturas emitidas con Verifactu. Puedes reimprimir cualquier factura, consultar su estado en AEAT o crear una rectificativa.</p>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-sm" onclick="cargarHistorialVf()">Actualizar</button>
+              <button class="btn btn-sm" onclick="exportarHistorialVf()">Exportar CSV</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="vf-historial-lista">
+              <div style="font-size:13px;color:var(--muted)">Pulsa "Actualizar" para cargar el historial.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-auditoria">
+        <div id="audit-locked" style="position:relative">
+          <div class="section-head">
+            <div>
+              <div class="section-eyebrow">Seguridad</div>
+              <h2>Auditoría de camareros</h2>
+              <p class="section-copy">Registro de todas las acciones que cada camarero realiza desde la pantalla del camarero: artículos añadidos a mesa, eliminaciones, cambios de cantidad, descuentos, impresiones de ticket, cobros y facturación. El acceso está protegido por una contraseña independiente de la del panel.</p>
+            </div>
+            <div class="mini-kicker">Acceso protegido</div>
+          </div>
+          <div class="card" style="max-width:520px;margin-top:1rem">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Acceso</div>
+                <div class="card-title">Introduce la contraseña de auditoría</div>
+                <p class="card-desc">Por defecto es <code>audit1234</code>. Cámbiala desde la pestaña <strong>Accesos</strong>. La contraseña se guarda en la base de datos del local, no en este dispositivo.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <input type="password" id="audit-pwd-input" placeholder="Contraseña de auditoría" autocomplete="off" />
+                <button class="btn btn-success" onclick="checkAuditPwd()">Entrar</button>
+              </div>
+              <div id="audit-pwd-error" style="display:none;color:var(--danger,#e55);font-size:12px;margin-top:8px">Contraseña incorrecta</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="audit-unlocked" style="display:none">
+          <div class="section-head">
+            <div>
+              <div class="section-eyebrow">Seguridad</div>
+              <h2>Auditoría de camareros</h2>
+              <p class="section-copy">Filtra el registro de acciones por fecha, franja horaria, camarero o tipo de acción. Se ven especialmente útil los eliminados y modificaciones de cantidad antes del cobro.</p>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="btn btn-sm" onclick="bloquearAuditoria()">Cerrar sesión</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Filtros</div>
+                <div class="card-title">Período, camarero y acción</div>
+                <p class="card-desc">Las fechas se interpretan en hora local del dispositivo, así que el día en curso siempre aparece. Por defecto se muestra el día de hoy.</p>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-sm" onclick="aplicarFiltrosAuditoria()">Aplicar</button>
+                <button class="btn btn-sm" onclick="resetFiltrosAuditoria()">Reset</button>
+                <button class="btn btn-sm" onclick="exportarAuditoriaCSV()">Exportar CSV</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="form-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.75rem">
+                <div class="field-wrap">
+                  <label class="field-label">Fecha desde</label>
+                  <input type="date" id="audit-fecha-ini" />
+                </div>
+                <div class="field-wrap">
+                  <label class="field-label">Fecha hasta</label>
+                  <input type="date" id="audit-fecha-fin" />
+                </div>
+                <div class="field-wrap">
+                  <label class="field-label">Hora desde</label>
+                  <input type="time" id="audit-hora-ini" value="00:00" />
+                </div>
+                <div class="field-wrap">
+                  <label class="field-label">Hora hasta</label>
+                  <input type="time" id="audit-hora-fin" value="23:59" />
+                </div>
+                <div class="field-wrap">
+                  <label class="field-label">Camarero</label>
+                  <select id="audit-camarero">
+                    <option value="">— Todos —</option>
+                  </select>
+                </div>
+                <div class="field-wrap">
+                  <label class="field-label">Acción</label>
+                  <select id="audit-accion">
+                    <option value="">— Todas —</option>
+                    <option value="articulo_agregado">Artículos añadidos</option>
+                    <option value="articulo_eliminado">Artículos eliminados</option>
+                    <option value="cantidad_editada">Cantidades editadas</option>
+                    <option value="descuento_aplicado">Descuentos aplicados</option>
+                    <option value="ticket_impreso">Tickets impresos</option>
+                    <option value="ticket_cobrado">Cobros</option>
+                    <option value="factura_emitida">Facturas emitidas</option>
+                    <option value="mesa_cerrada">Mesas cerradas</option>
+                    <option value="mesa_transferida">Mesas transferidas</option>
+                  </select>
+                </div>
+                <div class="field-wrap">
+                  <label class="field-label">Mesa (opcional)</label>
+                  <input type="text" id="audit-mesa" placeholder="Ej: 5" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-3" style="margin-top:1rem">
+            <div class="card">
+              <div class="card-header"><div><div class="card-kicker">Resumen</div><div class="card-title">Eventos</div></div></div>
+              <div class="card-body"><div class="metric-mini"><strong id="audit-stat-eventos">—</strong><span>Acciones registradas</span></div></div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div><div class="card-kicker">Riesgo</div><div class="card-title">Eliminaciones</div></div></div>
+              <div class="card-body"><div class="metric-mini"><strong id="audit-stat-eliminados">—</strong><span>Artículos eliminados de la cuenta</span></div></div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div><div class="card-kicker">Riesgo</div><div class="card-title">Descuentos / bajadas</div></div></div>
+              <div class="card-body"><div class="metric-mini"><strong id="audit-stat-descuentos">—</strong><span>Descuentos y cantidades reducidas</span></div></div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:1rem">
+            <div class="card-header">
+              <div>
+                <div class="card-kicker">Registro</div>
+                <div class="card-title">Eventos en el período seleccionado</div>
+                <p class="card-desc">Los más recientes aparecen primero. Las acciones sensibles (eliminaciones, descuentos, cambios de cantidad) se resaltan.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="audit-lista">
+                <div style="font-size:13px;color:var(--muted)">Pulsa "Aplicar" para cargar el registro.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="section" id="sec-enlaces">
         <div class="section-head">
           <div>
@@ -1729,6 +1989,22 @@
                 </div>
               </div>
             </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-kicker">Auditoría</div>
+                  <div class="card-title">Contraseña de auditoría</div>
+                  <p class="card-desc">Protege el acceso al registro de actividad. Es independiente de la del panel para que se pueda compartir solo con quien deba revisarla. Por defecto: <code>audit1234</code>.</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="form-row">
+                  <input type="password" id="new-audit-pwd" placeholder="Nueva contraseña" />
+                  <button class="btn" onclick="changeAuditPwd()">Guardar</button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="card">
@@ -1764,6 +2040,15 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- Modal genérico para Verifactu -->
+<div id="vf-modal-overlay" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1rem">
+  <div style="width:min(480px,100%);background:linear-gradient(180deg,rgba(20,29,55,.98),rgba(11,16,30,.99));border:1px solid var(--border-strong);border-radius:22px;box-shadow:0 28px 80px rgba(0,0,0,.45);padding:1.6rem;display:flex;flex-direction:column;gap:1rem">
+    <div id="vf-modal-title" style="font-family:var(--mono);font-size:16px;font-weight:500;color:var(--text)"></div>
+    <div id="vf-modal-body" style="font-size:13px;color:var(--muted-strong);display:flex;flex-direction:column;gap:8px"></div>
+    <div id="vf-modal-actions" style="display:flex;gap:8px;justify-content:flex-end;margin-top:.25rem"></div>
+  </div>
+</div>
 
 <script type="module" src="admin.js"></script>
 </body>
