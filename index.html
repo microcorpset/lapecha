@@ -217,7 +217,7 @@ h1 span{color:var(--accent)}
 }
 .cards{
   display:grid;
-  grid-template-columns:repeat(4, minmax(0,1fr));
+  grid-template-columns:repeat(auto-fit, minmax(195px, 1fr));
   gap:12px;
 }
 .card{
@@ -246,6 +246,7 @@ h1 span{color:var(--accent)}
 .card-cam{--c:#ffffff}
 .card-barra{--c:var(--orange)}
 .card-cocina{--c:var(--accent2)}
+.card-encargado{--c:#c084fc}
 .card-icon{
   width:48px; height:48px; border-radius:14px;
   display:flex; align-items:center; justify-content:center;
@@ -399,6 +400,14 @@ footer{
         <div class="card-tag">Producción</div>
         <div class="card-title">Cocina</div>
         <div class="card-desc">Recibe comandas, agrupa artículos repetidos y controla el pase con claridad.</div>
+        <div class="card-arrow">↗</div>
+      </a>
+
+      <a class="card card-encargado" href="encargado.html" data-dest="encargado.html">
+        <div class="card-icon">🔑</div>
+        <div class="card-tag">Carta</div>
+        <div class="card-title">Encargado</div>
+        <div class="card-desc">Visualiza y modifica la carta del local con acceso restringido.</div>
         <div class="card-arrow">↗</div>
       </a>
     </div>
